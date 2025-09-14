@@ -1,0 +1,86 @@
+name: "Develop Environment Terraform Workflow"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform-init-plan:
+    name: "terraform init and terraform plan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.13.2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: tarraform init
+        id: init
+        run: terraform init -input=false
+        working-directory: ./environments/dev
+
+      - name: terraform fmt
+        id: fmt
+        run: terraform fmt -check -recursive
+        working-directory: ./environments/dev
+
+      - name: terraform validate
+        id: validate
+        run: terraform validate
+        working-directory: ./environments/dev
+
+      - name: terraform plan
+        id: plan
+        run: terraform plan -out=tfplan -input=false
+        working-directory: ./environments/dev
+
+  terraform-apply:
+    name: "terraform apply"
+    runs-on: ubuntu-latest
+    needs: terraform-init-plan
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.13.2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: terraform init
+        id: init
+        run: terraform init -input=false
+        working-directory: ./environments/dev
+
+      - name: terraform apply
+        id: apply
+        run: terraform apply -input=false -auto-approve tfplan
+        working-directory: ./environments/dev
