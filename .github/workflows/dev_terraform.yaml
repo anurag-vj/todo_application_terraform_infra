@@ -35,22 +35,22 @@ jobs:
       - name: tarraform init
         id: init
         run: terraform init -input=false
-        working-directory: environments/dev
+        working-directory: ./environments/dev
 
       - name: terraform fmt
         id: fmt
         run: terraform fmt -check -recursive
-        working-directory: environments/dev
+        working-directory: ./environments/dev
 
       - name: terraform validate
         id: validate
         run: terraform validate
-        working-directory: environments/dev
+        working-directory: ./environments/dev
 
       - name: terraform plan
         id: plan
         run: terraform plan -out=tfplan -input=false
-        working-directory: environments/dev
+        working-directory: ./environments/dev
 
   terraform-apply:
     name: "terraform apply"
@@ -77,9 +77,9 @@ jobs:
       - name: terraform init
         id: init
         run: terraform init -input=false
-        working-directory: environments/dev
+        working-directory: ./environments/dev
 
       - name: terraform apply
         id: apply
         run: terraform apply -input=false -auto-approve tfplan
-        working-directory: environments/dev
+        working-directory: ./environments/dev
