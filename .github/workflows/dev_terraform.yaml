@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: terraform-init-plan
     if: github.ref == 'refs/heads/main'
-    environment: develop
+    environment: Develop
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
