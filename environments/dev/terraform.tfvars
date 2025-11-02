@@ -15,14 +15,19 @@ acr = {
   }
 }
 
-mssql_database = {
-  "mssql-dev-01" = {
+mssql_server = {
+  "mssql-server-01" = {
     server_name                  = "mssqldevtodoapp01"
     resource_group_name          = "rg-dev-todoapp-01"
     location                     = "central india"
     administrator_login          = "adminuser"
     administrator_login_password = "P@ssword@1234"
-    db_name                      = "mssqldbdevtodoapp01"
+  }
+}
+
+mssql_database = {
+  "mssql-database-01" = {
+    db_name = "mssqldbdevtodoapp01"
   }
 }
 

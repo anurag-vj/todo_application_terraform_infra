@@ -11,8 +11,15 @@ module "container_registry" {
   tags       = local.common_tags
 }
 
+module "mssql_server" {
+  depends_on   = [module.resource_group]
+  source       = "../../modules/azurerm_mssql_server"
+  mssql_server = var.mssql_server
+  tags         = local.common_tags
+}
+
 module "mssql_database" {
-  depends_on     = [module.resource_group]
+  depends_on     = [module.resource_group, module.mssql_server]
   source         = "../../modules/azurerm_mssql_database"
   mssql_database = var.mssql_database
   tags           = local.common_tags

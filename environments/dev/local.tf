@@ -1,7 +1,7 @@
 locals {
   common_tags = {
     "Environment" = "dev"
-    "ManagedBy"   = "DevOps"
+    "ManagedBy"   = "Terraform"
     "Project"     = "Todo Application"
   }
 }
