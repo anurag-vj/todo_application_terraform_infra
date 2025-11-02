@@ -20,7 +20,7 @@ variable "acr" {
   }))
 }
 
-variable "mssql_database" {
+variable "mssql_server" {
   description = "A map of MSSQL Server configurations."
   type = map(object({
     server_name                  = string
@@ -28,7 +28,13 @@ variable "mssql_database" {
     location                     = string
     administrator_login          = string
     administrator_login_password = string
-    db_name                      = string
+  }))
+}
+
+variable "mssql_database" {
+  description = "A map of MSSQL Database configurations."
+  type = map(object({
+    db_name = string
   }))
 }
 
